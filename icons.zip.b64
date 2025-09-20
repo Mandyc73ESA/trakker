@@ -1,0 +1,2 @@
+base64 --decode icons.zip.b64 > icons.zip
+unzip icons.zip

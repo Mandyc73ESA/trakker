@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TrakkerTime PWA</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="stylesheet" href="/css/styles.css">
+    <meta name="theme-color" content="#1f2937">
+</head>
+<body>
+    <header class="app-header">
+        <div class="brand">
+            <span class="brand-logo" aria-hidden="true">⏱️</span>
+            <span class="brand-name">TrakkerTime</span>
+        </div>
+        <button class="install-button" id="installButton" type="button" hidden>
+            Install App
+        </button>
+    </header>
+
+    <main class="layout">
+        <section class="timer-card" aria-labelledby="timerFormTitle">
+            <h1 id="timerFormTitle">Start a time entry</h1>
+            <p class="timer-card__subtitle">Capture who you are working for, what you are doing, and start the timer.</p>
+
+            <form id="timerForm" novalidate>
+                <fieldset class="input-group">
+                    <legend>Client &amp; Work details</legend>
+                    <label class="field">
+                        <span>Client</span>
+                        <input id="client" name="client" type="text" autocomplete="organization" placeholder="Acme Corp" />
+                    </label>
+                    <label class="field">
+                        <span>Project</span>
+                        <input id="project" name="project" type="text" autocomplete="section" placeholder="Website Redesign" />
+                    </label>
+                    <label class="field">
+                        <span>Task</span>
+                        <input id="task" name="task" type="text" autocomplete="off" placeholder="Wireframe review" />
+                    </label>
+                </fieldset>
+
+                <fieldset class="input-group">
+                    <legend>Billing information</legend>
+                    <label class="field">
+                        <span>Billing status</span>
+                        <select id="billingStatus" name="billingStatus">
+                            <option value="" selected>Select status</option>
+                            <option value="Billable">Billable</option>
+                            <option value="NonBillable">Non billable</option>
+                            <option value="Billed">Already billed</option>
+                        </select>
+                    </label>
+                    <label class="field field--inline" id="billingRateField" data-hidden>
+                        <span>Billing rate (per hour)</span>
+                        <div class="field__currency">
+                            <span aria-hidden="true">$</span>
+                            <input id="billingRate" name="billingRate" type="number" min="0" step="0.01" inputmode="decimal" placeholder="150.00" />
+                        </div>
+                    </label>
+                </fieldset>
+
+                <label class="field field--stacked">
+                    <span>Notes</span>
+                    <textarea id="notes" name="notes" rows="3" placeholder="Add any context for this time entry"></textarea>
+                </label>
+
+                <div class="form-footer">
+                    <button id="startButton" type="submit" class="primary-button">Start timer</button>
+                    <div class="status" id="statusMessage" role="status" aria-live="polite"></div>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <small>&copy; <span id="currentYear"></span> TrakkerTime. Track time with confidence.</small>
+    </footer>
+
+    <script src="/js/app.js" type="module"></script>
+</body>
+</html>

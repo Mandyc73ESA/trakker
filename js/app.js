@@ -131,8 +131,24 @@ installButton?.addEventListener('click', async () => {
 });
 
 if ('serviceWorker' in navigator) {
+    const registerServiceWorker = async () => {
+        const candidateUrls = ['/service-worker.js', 'service-worker.js'];
+        let lastError = null;
+
+        for (const url of candidateUrls) {
+            try {
+                return await navigator.serviceWorker.register(url);
+            } catch (error) {
+                lastError = error;
+                console.warn(`Service worker registration failed for ${url}`, error);
+            }
+        }
+
+        throw lastError ?? new Error('Service worker registration failed for all candidate URLs.');
+    };
+
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js').catch((error) => {
+        registerServiceWorker().catch((error) => {
             console.error('Service worker registration failed', error);
         });
     });

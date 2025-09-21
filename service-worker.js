@@ -1,17 +1,22 @@
-const CACHE_NAME = 'trakkertime-cache-v1';
-const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/css/styles.css',
-  '/js/app.js',
-  '/manifest.webmanifest',
-  'icons/icon-192.png',
-  'icons/icon-512.png'
+const CACHE_NAME = 'trakkertime-cache-v2';
+const PRECACHE_ASSETS = [
+  './',
+  './index.html',
+  './css/styles.css',
+  './js/app.js',
+  './manifest.webmanifest',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
+
+const getScopeUrl = () => self.registration?.scope ?? new URL('./', self.location).toString();
+const resolvePrecacheUrl = (path) => new URL(path, getScopeUrl()).toString();
+const getPrecacheUrls = () => PRECACHE_ASSETS.map((path) => resolvePrecacheUrl(path));
+const getOfflineFallbackUrl = () => resolvePrecacheUrl('./index.html');
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(getPrecacheUrls()))
   );
   self.skipWaiting();
 });
@@ -57,7 +62,7 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
           return networkResponse;
         })
-        .catch(() => caches.match('/index.html'));
+        .catch(() => caches.match(getOfflineFallbackUrl()));
     })
   );
 });

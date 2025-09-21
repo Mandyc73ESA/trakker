@@ -78,7 +78,7 @@ const submitTimerStart = async (event) => {
     setStatus('Starting timer…');
 
     try {
-        const response = await fetch('/timer/start', {
+        const response = await fetch('https://localhost:7233/timer/start', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

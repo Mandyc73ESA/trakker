@@ -1,13 +1,20 @@
-const CACHE_NAME = 'trakkertime-cache-v1';
-const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/css/styles.css',
-  '/js/app.js',
-  '/manifest.webmanifest',
+const CACHE_VERSION = 'v2';
+const CACHE_NAME = `trakkertime-cache-${CACHE_VERSION}`;
+
+const BASE_URL = new URL('./', self.location);
+
+const CORE_ASSETS = [
+  '.',
+  'index.html',
+  'css/styles.css',
+  'js/app.js',
+  'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png'
 ];
+
+const ASSETS_TO_CACHE = CORE_ASSETS.map((asset) => new URL(asset, BASE_URL).href);
+const OFFLINE_FALLBACK = new URL('index.html', BASE_URL).href;
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -57,7 +64,7 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
           return networkResponse;
         })
-        .catch(() => caches.match('/index.html'));
+        .catch(() => caches.match(OFFLINE_FALLBACK));
     })
   );
 });

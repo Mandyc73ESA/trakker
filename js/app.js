@@ -130,24 +130,9 @@ installButton?.addEventListener('click', async () => {
     deferredInstallPrompt = null;
 });
 
-const registerServiceWorker = async () => {
-    const rootPath = '/service-worker.js';
-
-    try {
-        return await navigator.serviceWorker.register(rootPath);
-    } catch (error) {
-        const scopedPath = new URL('service-worker.js', window.location.href).pathname;
-        if (scopedPath !== rootPath) {
-            console.warn(`Service worker registration at ${rootPath} failed, retrying with ${scopedPath}.`, error);
-            return navigator.serviceWorker.register(scopedPath);
-        }
-        throw error;
-    }
-};
-
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        registerServiceWorker().catch((error) => {
+        navigator.serviceWorker.register('/service-worker.js').catch((error) => {
             console.error('Service worker registration failed', error);
         });
     });
